@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 public class DbExam4 {
     public static void main(String[] args) {
     	try {
-    		//Class.forName("org.posgresql.Driver");
+    		Class.forName("org.postgresql.Driver");
     		
     		String sql = "SELECT product_id, product_name, price FROM products WHERE product_id = ? OR product_name = ? ORDER BY product_id ";
     		
