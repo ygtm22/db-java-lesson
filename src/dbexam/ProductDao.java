@@ -15,6 +15,10 @@ public class ProductDao{
 	
 	private static final String SELECT_ALL = "SELECT product_id, product_name, price FROM products ORDER BY product_id";
 	private static final String INSERT = "INSERT INTO products (product_name, price) VALUES (?, ?)";
+	private static final String SELECT_WHERE_PRODUCT_ID = "SELECT product_id, product_name, price FROM products WHERE product_id = ?";
+	private static final String UPDATE = "UPDATE products SET product_name = ?, price = ? WHERE product_id = ?";
+	private static final String DELETE = "DELETE FROM products WHERE product_name = ?";
+
 	
 	Connection con;
 	
@@ -45,5 +49,41 @@ public class ProductDao{
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public Product fintdByProductId(Integer productId) {
+		 try (PreparedStatement stmt = con.prepareStatement(SELECT_WHERE_PRODUCT_ID)) {
+		        stmt.setInt(1, productId);
+		        ResultSet rs = stmt.executeQuery();
+
+		        if (rs.next()) {
+		            return new Product(rs.getInt("product_id"), rs.getString("product_name"),  rs.getInt("price"));
+		        }
+		    } catch (SQLException e) {
+		       e.printStackTrace();
+		    }
+
+		    return null;
+	}
+	
+	public void update(Product pu) {
+		try (PreparedStatement stmt = con.prepareStatement(UPDATE)) {
+	        stmt.setString(1, pu.getProductName());
+	        stmt.setInt(2, pu.getPrice());
+	        stmt.setInt(3, pu.getProductId());
+	        stmt.executeUpdate();
+	    } catch (SQLException e) {
+	    	e.printStackTrace();
+	    }
+	}
+	
+	public void delete(String pd) {
+		 try (PreparedStatement stmt = con.prepareStatement(DELETE)) {
+		        stmt.setString(1, pd);
+
+		        stmt.executeUpdate();
+		    } catch (SQLException e) {
+		    	e.printStackTrace();
+		    }
 	}
 }
