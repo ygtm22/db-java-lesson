@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,38 +36,29 @@ public class ProductServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         request.setCharacterEncoding("UTF-8");
-
         
-        Integer productId = ParamUtil.checkAndParseInt(request.getParameter("productId"));
+        String productName = request.getParameter("productName");
+        Integer price = ParamUtil.checkAndParseInt(request.getParameter("price"));
 
-       
-        if (productId == null) {
-            // メッセージ設定
-            request.setAttribute("msg", "product_idを入力してください。  ");
+        // ログインチェック
+        ProductService productService = new ProductService();
+        
+        Product product = new Product(null, productName, price);
+        
+        List<Product> list = productService.find(product);
+        
+        // 表示メッセージの受け渡し
+        if (list.isEmpty()) {
+            request.setAttribute("msg", "対象のデータはありません");
 
             // 次画面指定
             request.getRequestDispatcher("/top.jsp").forward(request, response);
-            return;
-        }
-
-        
-        ProductService productService = new ProductService();
-        Product product = productService.findByProductId(productId);
-
-        // 表示メッセージの受け渡し
-        if (product == null) {
-            // メッセージ設定
-        	request.setAttribute("msg", "対象のデータはありませんでした。  ");
-
-            // 次画面指定
-        	request.getRequestDispatcher("/top.jsp").forward(request, response);
         } else {
             // メッセージ設定
-        	request.setAttribute("msg", "データを取得しました。  ");
-        	request.setAttribute("product", product);
+            request.setAttribute("list", list);
 
             // 次画面指定
-        	request.getRequestDispatcher("/searchResult.jsp").forward(request, response);  
+            request.getRequestDispatcher("/searchResult.jsp").forward(request, response);
         }
     }
 }

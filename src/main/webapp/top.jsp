@@ -14,7 +14,8 @@
     <p>${msg}</p>
   </c:if>
   <form action="ProductServlet" method="post">
-    product_id: <input type="text" name="productId" value="${param.productId }">
+    product_Name: <input type="text" name="productName" value="${param.productName}"><br>
+    price: <input type="text" name="price" value="${param.price}">
     <br>
     <button type="submit">検索</button>
   </form>

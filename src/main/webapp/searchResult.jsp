@@ -10,13 +10,24 @@
 </head>
 <body>
 	<h1>検索結果</h1>
-  <p>データを取得しました。  </p>
-  <div>
-  <label>product_id:</label>${fn:escapeXml(product.productId)}<br>
-  <label>product_name:</label>${fn:escapeXml(product.productName)}<br>
-  <label>price:</label>${fn:escapeXml(product.price)}<br>
-  </div>
+	
+	<table border = 1>
+	<tr>
+      <th>product_id</th>
+      <th>product_name</th>
+      <th>price</th>
+    </tr>
+    <c:forEach var="product" items="${list}">
+      <tr>
+        <td>${fn:escapeXml(product.productId)}</td>
+        <td>${fn:escapeXml(product.productName)}</td>
+        <td>${fn:escapeXml(product.price)}</td>
+      </tr>
+    </c:forEach>
+      <tr>
+	</table>
   
   <a href="top.jsp">戻る</a>
+  
 </body>
 </html>
